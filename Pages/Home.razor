@@ -1,0 +1,101 @@
+﻿@page "/"
+@implements IDisposable
+
+<div class="love-page">
+    <div class="love-card">
+        <div class="content">
+            <p class="subtitle">Faltam</p>
+
+            <div class="countdown">
+                <div class="time-box">
+                    <span class="number">@days</span>
+                    <span class="label">Dias</span>
+                </div>
+
+                <div class="time-box">
+                    <span class="number">@hours</span>
+                    <span class="label">Horas</span>
+                </div>
+
+                <div class="time-box">
+                    <span class="number">@minutes</span>
+                    <span class="label">Minutos</span>
+                </div>
+
+                <div class="time-box">
+                    <span class="number">@seconds</span>
+                    <span class="label">Segundos</span>
+                </div>
+            </div>
+
+            <p class="to-text">para</p>
+
+            <h1 class="title">eu te ver de novo ❤️</h1>
+
+            <p class="love-message">
+                PONTEIRO DO MEU RELOGIO <br />
+                ALHO DA MINHA CEBOLA <br />
+                TAMPA DA MINHA PANELA
+            </p>
+
+            <div class="date-pill">
+                4 de Novembro
+            </div>
+
+            <p class="footer-text">
+                TE AMO MEU AMOR 💌
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DateTime targetDate = new DateTime(2026, 11, 4, 0, 0, 0);
+
+    private int days;
+    private int hours;
+    private int minutes;
+    private int seconds;
+
+    private bool isRunning = true;
+
+    protected override void OnInitialized()
+    {
+        UpdateCountdown();
+        _ = StartCountdown();
+    }
+
+    private async Task StartCountdown()
+    {
+        while (isRunning)
+        {
+            UpdateCountdown();
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(1000);
+        }
+    }
+
+    private void UpdateCountdown()
+    {
+        TimeSpan remaining = targetDate - DateTime.Now;
+
+        if (remaining.TotalSeconds <= 0)
+        {
+            days = 0;
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+            return;
+        }
+
+        days = remaining.Days;
+        hours = remaining.Hours;
+        minutes = remaining.Minutes;
+        seconds = remaining.Seconds;
+    }
+
+    public void Dispose()
+    {
+        isRunning = false;
+    }
+}
